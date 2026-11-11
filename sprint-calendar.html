@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>30-Day Analytics Sprint</title>
+<style>
+:root{--bg:#f6f7fb;--card:#fff;--tx:#1c2030;--mu:#667;--bd:#dde0ea;--ac:#4f46e5;--ok:#16a34a;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#12141c;--card:#1c1f2b;--tx:#eceef5;--mu:#9aa0b4;--bd:#2c3040;--ac:#818cf8;--ok:#4ade80;color-scheme:dark}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.5 system-ui,-apple-system,Segoe UI,sans-serif}
+main{max-width:980px;margin:0 auto;padding:20px 16px 40px}
+h1{font-size:22px;margin:0 0 4px}.sub{color:var(--mu);margin:0 0 16px}
+.top{display:grid;grid-template-columns:2fr 1fr;gap:12px}@media(max-width:600px){.top{grid-template-columns:1fr}}
+.box{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:14px}
+.bar{height:12px;background:var(--bd);border-radius:9px;overflow:hidden;margin:8px 0 4px}.bar i{display:block;height:100%;background:var(--ac);width:0;transition:width .4s}
+.big{font-size:26px;font-weight:700}.mu{color:var(--mu);font-size:13px}
+.tabs{display:flex;gap:8px;margin:18px 0 12px}.tabs button{padding:8px 18px;border-radius:20px;border:1px solid var(--bd);background:var(--card);color:var(--tx);cursor:pointer;font:inherit}.tabs button.on{background:var(--ac);color:#fff;border-color:var(--ac)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(128px,1fr));gap:10px}
+.day{text-align:left;background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:10px;cursor:pointer;color:var(--tx);font:inherit;position:relative;min-height:104px}
+.day:hover{border-color:var(--ac)}.day.today{outline:2px solid var(--ac)}.day.done{background:color-mix(in srgb,var(--ok) 14%,var(--card));border-color:var(--ok)}
+.day b{font-size:18px}.day .d{color:var(--mu);font-size:12px}.day .ck{position:absolute;top:8px;right:10px;color:var(--ok);font-weight:700}
+.chips{display:flex;flex-wrap:wrap;gap:3px;margin-top:6px}.chip{font-size:10.5px;padding:1px 6px;border-radius:9px;background:var(--bd)}
+dialog{border:1px solid var(--bd);border-radius:14px;background:var(--card);color:var(--tx);width:min(680px,94vw);max-height:90vh;padding:0;margin:auto}
+dialog::backdrop{background:#0008}.dh{position:sticky;top:0;background:var(--card);padding:14px 18px;border-bottom:1px solid var(--bd);display:flex;justify-content:space-between;gap:10px;z-index:1}
+.dh h2{margin:0;font-size:18px}.x{border:0;background:none;color:var(--tx);font-size:22px;cursor:pointer}.db{padding:14px 18px 20px}
+details{border:1px solid var(--bd);border-radius:10px;margin:8px 0}summary{padding:10px 12px;cursor:pointer;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+summary .t{font-weight:600}.time{margin-left:auto;font-size:12px;color:var(--mu)}.in{padding:4px 14px 12px;border-top:1px solid var(--bd)}
+.in ul{margin:6px 0 8px;padding-left:20px}.lk{display:inline-block;margin:2px 10px 2px 0;padding:4px 10px;border-radius:8px;border:1px dashed var(--bd);color:var(--mu);font-size:13px;text-decoration:none}a.lk{border:1px solid var(--ac);color:var(--ac)}
+h3{font-size:14px;margin:18px 0 6px;color:var(--mu);text-transform:uppercase;letter-spacing:.04em}
+.q{padding:10px 12px;border-radius:10px;background:var(--bg);margin:6px 0}
+.opts{display:flex;gap:8px;flex-wrap:wrap}.opts button{border:1px solid var(--bd);background:var(--bg);color:var(--tx);border-radius:10px;padding:8px 10px;cursor:pointer;font:inherit}.opts button.on{border-color:var(--ac);background:color-mix(in srgb,var(--ac) 18%,var(--bg))}
+.stars button{border:0;background:none;font-size:26px;cursor:pointer;color:var(--bd);padding:0 2px}.stars button.on{color:#f5b301}
+.fin{width:100%;margin-top:16px;padding:12px;border:0;border-radius:10px;background:var(--ac);color:#fff;font:600 15px inherit;cursor:pointer}.fin.d{background:var(--ok)}
+:root,:root:not([data-theme=light]){--bg:#fbf7f2;--card:#fffdfa;--tx:#3b3a4a;--mu:#857f92;--bd:#e4dcd3;--ac:#9b8bd6;--ok:#7fb995;color-scheme:light}
+*,*::before,*::after{border-radius:0!important}
+body{font-family:Georgia,'Times New Roman',serif}
+.box,dialog,.day,.q,details,.tabs button,.opts button,.lk{box-shadow:none}
+.cal{display:grid;grid-template-columns:repeat(7,1fr);border-top:1px solid var(--bd);border-left:1px solid var(--bd);background:var(--card)}
+.cal>*{border-right:1px solid var(--bd);border-bottom:1px solid var(--bd)}
+.wh{text-align:center;padding:8px 0;font-size:12px;letter-spacing:.08em;text-transform:uppercase;background:#efe6f5;color:var(--mu)}
+.cal .day{border:0;border-right:1px solid var(--bd);border-bottom:1px solid var(--bd);min-height:112px;padding:6px;background:var(--card)}
+.cal .day.done{background:#e3f2e8}.cal .day.today{outline:2px solid var(--ac);outline-offset:-2px}.cal .day:hover{background:#f3edfa}
+.blank{background:#f4efe9;min-height:112px}
+.chip{font-size:10px;padding:1px 4px;margin:1px 0;display:block;width:100%}
+.tabs button{border-radius:0}.tabs button.on{background:var(--ac)}.dh{background:#efe6f5}
+.row{display:flex;gap:10px;align-items:center;padding:10px 12px;border:1px solid var(--bd);margin:8px 0}.row .sub2{color:var(--mu);font-size:12.5px}
+.expl{margin:6px 0;padding:8px 10px;border-left:3px solid var(--ac);background:#f6f1fb}.expl b{display:block}.about{padding:8px 10px;background:#f3f7ee;border-left:3px solid var(--ok);margin:6px 0;font-size:13.5px}
+@media(max-width:600px){.cal .day,.blank{min-height:84px}.chip{font-size:9px}}
+:root[data-theme=light]{--bg:#efe8d8;--card:#faf6ec;--tx:#34372b;--mu:#7a7a68;--bd:#d6cdb6;--ac:#6f8f6a;--ok:#8aa77f;--hd:#dfe6d2;--hi:#e8dcc4;color-scheme:light}
+:root[data-theme=dark]{--bg:#1b241d;--card:#232f26;--tx:#ebe6d6;--mu:#a3ab98;--bd:#3a4a3d;--ac:#8fb996;--ok:#6fa37a;--hd:#2c3b2f;--hi:#33442f;color-scheme:dark}
+body{background:var(--bg);color:var(--tx);font-family:'Lora',Georgia,serif}
+h1,h2,h3{font-family:'Lora',Georgia,serif}h1{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+#tg{margin-left:auto;border:1px solid var(--bd);background:var(--card);color:var(--tx);padding:6px 12px;cursor:pointer;font:13px 'Lora',Georgia,serif}
+.wh,.dh{background:var(--hd);color:var(--tx)}.blank{background:var(--hi);opacity:.45}
+.cal .day.done{background:color-mix(in srgb,var(--ok) 28%,var(--card))}.cal .day:hover{background:var(--hd)}
+.expl{background:var(--hd);border-left-color:var(--ac)}.about{background:var(--hi);border-left-color:var(--ok);color:var(--tx)}
+.chip{color:#2e3a2f;filter:saturate(.5) sepia(.25)}
+.tabs button.on,.fin{background:var(--ac);color:#fff}:root[data-theme=dark] .tabs button.on,:root[data-theme=dark] .fin{color:#16211a}
+.lk{display:block;margin:4px 0;border-style:solid}a.lk:hover{background:var(--hd)}
+.note{font-size:13px;color:var(--mu);margin:4px 0;font-style:italic}
+textarea.ans{width:100%;min-height:96px;background:var(--bg);color:var(--tx);border:1px solid var(--bd);padding:8px;font:inherit;margin:6px 0}
+.rb{border:1px solid var(--ac);background:none;color:var(--tx);padding:8px 14px;cursor:pointer;font:inherit;margin:6px 8px 6px 0}
+details.ans{border:0;margin:4px 0}details.ans summary{padding:4px 0;color:var(--ac);cursor:pointer}
+</style><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lora:wght@400;600&display=swap"></head><body><main>
+<h1>☕ 30-Day Data Analytics Sprint <button id="tg">☀︎ / ☾ Theme</button></h1><p class="sub">Nov 12 – Dec 11, 2026 · SQL · Python · Excel · Power BI · Maths · Retail Sales &amp; Profitability project</p>
+<div class="top"><div class="box"><div class="mu">Progress</div><div class="big" id="pct">0%</div><div class="bar"><i id="fill"></i></div><div class="mu" id="cnt"></div></div>
+<div class="box"><div class="mu">Streak</div><div class="big" id="str">0 🔥</div><div class="mu" id="best"></div></div></div>
+<div class="tabs"><button id="t11">November</button><button id="t12">December</button></div>
+<div class="grid" id="grid"></div></main>
+<dialog id="dlg"></dialog>
+<script>
+// ---------- Paste links here later. Key = "dayNumber-slotKey" (slotKeys: proj, sql, maj, min, apt) ----------
+const LINKS={/* "1-sql":{about:"What this lecture covers",learn:"https://...",practice:"https://..."} */};
+// ---------- Content ----------
+const SQL="Database fundamentals|Tables, data types, keys|SELECT & aliases|WHERE filtering|AND/OR/NOT/IN/BETWEEN/LIKE|DISTINCT, ORDER BY, LIMIT|NULL & COALESCE|Aggregate functions|GROUP BY|HAVING|String functions|Numeric functions|Date & time functions|CASE WHEN|INNER JOIN|Outer joins|SELF & CROSS JOIN|Set operations|Subqueries|Correlated subqueries, EXISTS|CTEs|Window functions|RANK, LAG, LEAD|DDL|DML|Constraints & transactions|Views, indexes, EXPLAIN|Data modelling|Business case studies|Mock interview".split("|");
+const PY="Environment setup|Variables & types|Operators|Strings|Lists & tuples|Dicts & sets|Conditions & loops|Functions|Comprehensions|Errors & debugging|Files & paths|Modules & packages|NumPy arrays|NumPy operations|Pandas foundations|Selecting & filtering|Missing & duplicate data|Types & transformations|Groupby & aggregation|Merge/join/concat|Dates & time series|EDA|Matplotlib|Seaborn|Problem-solving|Reusable workflow|SQL + Python validation|Code quality|Mini case study|Python assessment".split("|");
+const XL="Workbook basics|Formatting|Basic formulas|Relative/absolute refs|Core functions|Logical functions|SUMIFS/COUNTIFS|XLOOKUP/VLOOKUP|INDEX-MATCH|Text functions|Date functions|Sort & filter|Validation & auditing|Tables & structured refs|Conditional formatting|PivotTables|PivotTable analysis|PivotCharts & slicers|Dynamic arrays|What-if analysis|Dashboard design|Advanced charts|Power Query basics|Power Query cleaning|Power Query transforms|Append & merge|Refresh workflow|Case study|Practical assessment|Interview assessment".split("|");
+const BI="Power BI ecosystem|Connecting to data|Power Query Editor|Data cleaning|Query transformations|Merge & append|M language & refresh|Modelling foundations|Fact & dimension tables|Relationships|Date tables|Model quality|DAX foundations|Basic DAX measures|Filter context|CALCULATE|DAX filter functions|Time intelligence|Profitability KPIs|Visual fundamentals|Filters & interactions|Report design|Drill-through & navigation|Dashboard page 1|Dashboard page 2|Dashboard page 3|Validation & performance|Service & sharing|Full dashboard review|Power BI assessment".split("|");
+const MA="Descriptive stats: mean, median, mode|Spread: variance, SD, IQR|Probability basics|Conditional probability & Bayes|Distributions: normal, binomial|Sampling & CLT|Confidence intervals|Hypothesis testing basics|t-test & p-values|Correlation & covariance|Regression basics|Outliers & skewness|Stats revision & interview Qs".split("|");
+const PROJ=["Define business problem & KPIs","Inspect dataset & documentation","Data quality audit","Cleaning plan & rules","Data wrangling","Load into PostgreSQL schema","Validate row counts & keys","SQL profitability queries","Query integration & views","Python EDA","Python profitability analysis","Cross-check SQL vs Python","Star-schema model in Power BI","DAX measures & KPI dictionary","Dashboard page 1","Dashboard page 2","Dashboard page 3","Report compilation","Insights & recommendations","Code clean-up","End-to-end testing","README & GitHub commit"];
+const HR=["Tell me about yourself.","Why data analytics?","Describe a project you are proud of.","A strength and a weakness?","Tell me about a time you faced a tough bug or problem.","How do you prioritise multiple deadlines?","Describe a time you learned something quickly.","How do you handle feedback?","Why should we hire you as a fresher?","Where do you see yourself in 3 years?","Tell me about a mistake and what you learned.","How do you explain technical results to non-technical people?","How do you stay consistent when motivation drops?","Describe teamwork you were part of.","Why did you move from MCA/UI-UX towards analytics?"];
+const TQ={sql:["What is the difference between a primary key and a foreign key?","Which keys might link sales and product tables, and how do you verify them?","What does SELECT * cost compared to naming columns?","Difference between WHERE and HAVING?","How does LIKE differ from ILIKE in PostgreSQL?","How do you get the top 5 products by sales?","How is NULL different from 0, and what does COUNT(col) do with NULLs?","How do COUNT(*), COUNT(col) and COUNT(DISTINCT col) differ?","Why must non-aggregated columns appear in GROUP BY?","When would you use HAVING instead of WHERE?","How do you find trailing-space duplicates in text columns?","Why use ROUND on money values, and when is it risky?","DATE_TRUNC vs EXTRACT: when do you use each?","Write a CASE to bucket products into profit tiers.","INNER vs LEFT JOIN: what rows are lost?","How do you find orders with no matching product?","When is a SELF JOIN useful?","UNION vs UNION ALL?","Scalar vs multi-row subquery?","Correlated subquery vs JOIN: performance?","Why use a CTE over nested subqueries?","Window function vs GROUP BY?","RANK vs DENSE_RANK vs ROW_NUMBER?","TRUNCATE vs DELETE vs DROP?","What does a transaction protect you from?","Explain ACID in one line each.","What does EXPLAIN ANALYZE tell you?","What is normalisation and why denormalise for analytics?","Walk me through your hardest retail query.","How would you debug a query returning duplicate rows?"],oth:["How do you validate a dashboard total against the source?","Explain a star schema in two sentences.","Calculated column vs measure in DAX?","What does CALCULATE do?","Why use a separate date table?","Mean vs median: when does each mislead?","What does a p-value mean?","Correlation vs causation?","Walk me through your project end to end."]};
+const MOODS=[["😫","Exhausted"],["😕","Struggled"],["😐","Okay"],["🙂","Good"],["🤩","Excellent"]];
+const COL={proj:"Project",sql:"SQL",py:"Python",xl:"Excel",bi:"Power BI",ma:"Maths",apt:"Aptitude"};
+// ---------- Build schedule ----------
+const START=new Date(2026,10,12),DN=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"],MN=["Nov","Dec"];
+const days=[...Array(30)].map((_,i)=>{const d=new Date(START);d.setDate(d.getDate()+i);return{n:i+1,date:d,dow:d.getDay(),slots:[]}});
+const chunk=(a,n)=>[...Array(n)].map((_,i)=>a.slice(Math.floor(i*a.length/n),Math.floor((i+1)*a.length/n)));
+const wk=days.filter(d=>d.dow>=1&&d.dow<=5),sat=days.filter(d=>d.dow==6),mn=days.filter(d=>d.dow>=1&&d.dow<=6);
+const sqlC=chunk(SQL,wk.length);
+const pyW=wk.filter((_,k)=>![1,3].includes(k%5)),xlW=wk.filter((_,k)=>[1,3].includes(k%5));
+const pyC=chunk(PY,pyW.length),xlC=chunk(XL,xlW.length);
+const biD=mn.filter((_,j)=>j%2==0),maD=mn.filter((_,j)=>j%2==1);
+const biC=chunk(BI,biD.length),maC=chunk(MA,maD.length);
+let pi=0;
+days.forEach(d=>{
+ const sun=d.dow==0,sa=d.dow==6;
+ d.slots.push({k:"proj",t:"Project: Retail Sales & Profitability",time:sun?"3 hrs":sa?"1.5 hrs":"1.5 hrs",items:[sun?"Project sprint + buffer: finish anything left from earlier days":PROJ[Math.min(pi,PROJ.length-1)]]});
+ if(!sun)pi+=sa?0:1;
+ if(sun)return d.slots.push({k:"buf",t:"Buffer / catch-up",time:"within the 3 hrs",items:["Revisit topics you fell behind on this week, plus weekly self-review"]})&&0;
+ if(!sa){
+  d.slots.push({k:"sql",t:"Major 1: SQL",time:"1.5 hrs",items:sqlC[wk.indexOf(d)]});
+  const py=pyW.indexOf(d);d.slots.push(py>=0?{k:"py",t:"Major 2: Python",time:"1.5 hrs",items:pyC[py]}:{k:"xl",t:"Major 2: Excel",time:"1.5 hrs",items:xlC[xlW.indexOf(d)]});
+ }
+ const b=biD.indexOf(d);d.slots.push(b>=0?{k:"bi",t:"Minor: Power BI",time:sa?"2 hrs":"1 hr",items:biC[b]}:{k:"ma",t:"Minor: Maths for Analytics",time:sa?"2 hrs":"1 hr",items:maC[maD.indexOf(d)]});
+ if([1,2,5,6].includes(d.dow))d.slots.push({k:"apt",t:"Aptitude",time:"45–60 min",items:["Aptitude practice set (quant, logical reasoning, verbal)"]});
+});
+days.forEach((d,i)=>{d.hr=HR[i%HR.length];const s=d.slots.find(s=>s.k=="sql");const f=s&&s.items[0];const si=f?SQL.indexOf(f):-1;d.tq=si>=0?TQ.sql[si]:TQ.oth[i%TQ.oth.length];
+ d.gist=d.dow==0?"Project sprint day: 3 hours on the project plus buffer for anything you missed.":d.slots.filter(s=>s.k!="proj").map(s=>COL[s.k]||"Buffer").join(" · ")+" with the project"});
+const DESC=Object.fromEntries(SQL.map((t,i)=>[t,"What databases, RDBMS and SQL are, and how PostgreSQL organises data into databases, schemas and tables.|How a table is defined: column types, and how primary and foreign keys link the retail tables.|Pulling only the columns you need from a table and renaming them for readable output.|Keeping only rows that meet a condition (price, date, quantity) using comparison operators.|Combining several conditions and matching ranges, lists and text patterns.|Removing duplicates, sorting results and fetching a top-N.|What missing values really are, how to find them and how to replace them safely.|Collapsing many rows into one number: totals, counts, averages, min and max.|Calculating those numbers per category, product or region.|Filtering groups after aggregation, and why WHERE cannot do that.|Cleaning and standardising text with TRIM, UPPER, LOWER, CONCAT and REPLACE.|Rounding and inspecting numbers, including spotting negative profit.|Breaking dates into month, quarter and year to build trends.|If-then logic inside a query, used to label products by profitability.|Combining tables on matching keys, keeping only rows that match.|Keeping unmatched rows to find missing relationships.|Joining a table to itself, and generating all combinations of two tables.|Stacking and comparing result sets with UNION, INTERSECT and EXCEPT.|A query inside a query, e.g. products performing above the overall average.|Subqueries that depend on each outer row, and testing whether related rows exist.|Breaking a complex analysis into named, readable steps with WITH.|Calculations across related rows without collapsing them, using OVER and PARTITION BY.|Ranking within groups and comparing a row with the previous or next period.|Creating, altering and dropping tables, and why destructive commands need care.|Inserting, updating and deleting rows safely in a practice table.|Rules that protect your data, and COMMIT/ROLLBACK to undo mistakes.|Saving queries as views, speeding up lookups and reading query plans.|Designing fact and dimension tables and normalising a retail dataset.|Combining filters, joins, CTEs and windows to answer real retail questions.|Timed query writing and explaining your solutions aloud.".split("|")[i]]));
+const SIMPLE={proj:"Tick if you worked on the project today",ma:"Scheduled today",apt:"Scheduled today",buf:"Catch-up and weekly review"};
+// ---------- State ----------
+let S={};try{S=JSON.parse(localStorage.getItem("sprint-v1")||"{}")}catch(e){}
+const save=()=>{try{localStorage.setItem("sprint-v1",JSON.stringify(S))}catch(e){}};
+const st=n=>S[n]||(S[n]={chk:{},mood:null,diff:0,done:false});
+let tab=0;const $=id=>document.getElementById(id);
+const ds=d=>d.date.getDate()+" "+MN[d.date.getMonth()-10]+", "+DN[d.dow];
+function stats(){const done=days.filter(d=>st(d.n).done);$("pct").textContent=Math.round(done.length/30*100)+"%";$("fill").style.width=done.length/30*100+"%";$("cnt").textContent=done.length+" of 30 days completed";
+ let best=0,run=0,cur=0;days.forEach(d=>{if(st(d.n).done){run++;best=Math.max(best,run)}else run=0});
+ const t=new Date();t.setHours(0,0,0,0);const yi=Math.floor((t-START)/864e5)-1;let i=days.length-1;while(i>=0&&!st(days[i].n).done)i--;
+ if(i>=0&&i>=yi){let j=i;while(j>=0&&st(days[j].n).done){cur++;j--}}
+ $("str").textContent=cur+" 🔥";$("best").textContent="Best streak: "+best+" days"}
+function render(){$("t11").className=tab==0?"on":"";$("t12").className=tab==1?"on":"";
+ const t=new Date();t.setHours(0,0,0,0);
+ $("grid").innerHTML=days.filter(d=>d.date.getMonth()==10+tab).map(d=>`<button class="day ${st(d.n).done?"done":""} ${+d.date==+t?"today":""}" data-n="${d.n}"><b>${d.date.getDate()}</b> <span class="d">${DN[d.dow]}</span>${st(d.n).done?'<span class="ck">✓</span>':""}<div class="d">Day ${d.n}</div><div class="chips">${d.slots.filter(s=>COL[s.k]).map(s=>`<span class="chip">${COL[s.k]}</span>`).join("")}</div></button>`).join("");
+ stats()}
+function open(n){const d=days[n-1],s=st(n);
+ const slots=d.slots.map(x=>{const L=LINKS[n+"-"+x.k]||{},c=s.chk[x.k];
+  const lk=(u,l)=>u?`<a class="lk" href="${u}" target="_blank" rel="noopener">${l}</a>`:`<span class="lk">${l}: link to be added</span>`;
+  return `<details><summary><input type="checkbox" data-c="${x.k}" ${c?"checked":""} onclick="event.stopPropagation()"><span class="t">${x.t}</span><span class="time">${x.time}</span></summary><div class="in"><div class="mu" style="margin-top:8px">What you will learn / do today</div><ul>${x.items.map(i=>`<li>${i}</li>`).join("")}</ul>${x.k=="buf"?"":lk(L.learn,"📖 Learning")+lk(L.practice,"✍️ Practice")}</div></details>`}).join("");
+ $("dlg").innerHTML=`<div class="dh"><div><h2>Day ${n} · ${ds(d)}</h2><div class="mu">${d.gist}</div></div><button class="x" onclick="dlg.close()" aria-label="Close">×</button></div><div class="db"><h3>Today’s slots</h3>${slots}<h3>Interview prep</h3><div class="q"><b>HR / soft skill:</b> ${d.hr}</div><div class="q"><b>Technical:</b> ${d.tq}</div><h3>How was the day?</h3><div class="opts" id="mo">${MOODS.map((m,i)=>`<button data-m="${i}" class="${s.mood===i?"on":""}">${m[0]} ${m[1]}</button>`).join("")}</div><h3>Difficulty</h3><div class="stars" id="st">${[1,2,3,4,5].map(i=>`<button data-s="${i}" class="${s.diff>=i?"on":""}">★</button>`).join("")}</div><button class="fin ${s.done?"d":""}" id="fin">${s.done?"✓ Completed (tap to undo)":"Mark day complete"}</button></div>`;
+ $("dlg").dataset.n=n;$("dlg").showModal()}
+function render(){$("t11").className=tab==0?"on":"";$("t12").className=tab==1?"on":"";
+ const t=new Date();t.setHours(0,0,0,0);const list=days.filter(d=>d.date.getMonth()==10+tab);const PC={proj:"#fde2e4",sql:"#d3e8fb",py:"#fff3bf",xl:"#d8f0d8",bi:"#ffe3c4",ma:"#e7dcf7",apt:"#d6f0ee"};
+ $("grid").className="cal";
+ $("grid").innerHTML=DN.map(x=>`<div class="wh">${x}</div>`).join("")+'<div class="blank"></div>'.repeat(list[0].dow)+list.map(d=>`<button class="day ${st(d.n).done?"done":""} ${+d.date==+t?"today":""}" data-n="${d.n}"><b>${d.date.getDate()}</b> <span class="d">Day ${d.n}</span>${st(d.n).done?'<span class="ck">✓</span>':""}<div style="margin-top:4px">${d.slots.filter(s=>COL[s.k]).map(s=>`<span class="chip" style="background:${PC[s.k]}">${COL[s.k]}</span>`).join("")}</div></button>`).join("");
+ stats()}
+function open(n){const d=days[n-1],s=st(n);
+ const slots=d.slots.map(x=>{const c=s.chk[x.k],L=LINKS[n+"-"+x.k]||{};
+  if(SIMPLE[x.k])return `<label class="row"><input type="checkbox" data-c="${x.k}" ${c?"checked":""}><div><b>${x.t}</b> <span class="mu">· ${x.time}</span>${x.k=="ma"?`<div class="sub2">${x.items[0]}</div>`:`<div class="sub2">${SIMPLE[x.k]}</div>`}</div></label>`;
+  const lk=(u,l)=>u?`<a class="lk" href="${u}" target="_blank" rel="noopener">${l}</a>`:`<span class="lk">${l}: link to be added</span>`;
+  return `<details><summary><input type="checkbox" data-c="${x.k}" ${c?"checked":""} onclick="event.stopPropagation()"><span class="t">${x.t}</span><span class="time">${x.time}</span></summary><div class="in"><div class="mu" style="margin-top:8px">What you are learning today</div>${x.items.map(i=>`<div class="expl"><b>${i}</b>${DESC[i]||""}</div>`).join("")}<div class="mu" style="margin-top:10px">Lecture</div><div class="about">This lecture covers: ${L.about||"<i>to be added</i>"}</div>${lk(L.learn,"📖 Learning link")}<div class="mu" style="margin-top:8px">Practice</div>${lk(L.practice,"✍️ Practice link")}</div></details>`}).join("");
+ $("dlg").innerHTML=`<div class="dh"><div><h2>Day ${n} · ${ds(d)}</h2><div class="mu">${d.gist}</div></div><button class="x" onclick="dlg.close()" aria-label="Close">×</button></div><div class="db"><h3>Today’s slots</h3>${slots}<h3>Interview prep</h3><div class="q"><b>HR / soft skill:</b> ${d.hr}</div><div class="q"><b>Technical:</b> ${d.tq}</div><h3>How was the day?</h3><div class="opts">${MOODS.map((m,i)=>`<button data-m="${i}" class="${s.mood===i?"on":""}">${m[0]} ${m[1]}</button>`).join("")}</div><h3>Difficulty</h3><div class="stars">${[1,2,3,4,5].map(i=>`<button data-s="${i}" class="${s.diff>=i?"on":""}">★</button>`).join("")}</div><button class="fin ${s.done?"d":""}" id="fin">${s.done?"✓ Completed (tap to undo)":"Mark day complete"}</button></div>`;
+ $("dlg").dataset.n=n;$("dlg").showModal()}
+// ===== v3: links, theme, interview prep =====
+try{document.documentElement.dataset.theme=localStorage.getItem("sprint-theme")||(matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light")}catch(e){document.documentElement.dataset.theme="light"}
+const B1="https://sqlbolt.com/lesson/",W3="https://www.w3schools.com/";
+const SQM={"Database fundamentals":["introduction"],"Tables, data types, keys":["creating_tables"],"SELECT & aliases":["select_queries_introduction"],"WHERE filtering":["select_queries_with_constraints"],"AND/OR/NOT/IN/BETWEEN/LIKE":["select_queries_with_constraints_pt_2"],"DISTINCT, ORDER BY, LIMIT":["filtering_sorting_query_results"],"NULL & COALESCE":["select_queries_with_nulls"],"Aggregate functions":["select_queries_with_aggregates"],"GROUP BY":["select_queries_with_aggregates_pt_2"],"HAVING":["select_queries_with_aggregates_pt_2"],"String functions":["select_queries_with_expressions"],"Numeric functions":["select_queries_with_expressions"],"INNER JOIN":["select_queries_with_joins"],"Outer joins":["select_queries_with_outer_joins"],"SELF & CROSS JOIN":["select_queries_with_joins"],"DDL":["creating_tables","altering_tables","dropping_tables"],"DML":["inserting_rows","updating_rows","deleting_rows"],"Constraints & transactions":["creating_tables"]};
+const PYM={"Environment setup":["python_getstarted.asp"],"Variables & types":["python_variables.asp","python_datatypes.asp"],"Operators":["python_operators.asp"],"Strings":["python_strings.asp"],"Lists & tuples":["python_lists.asp","python_tuples.asp"],"Dicts & sets":["python_dictionaries.asp","python_sets.asp"],"Conditions & loops":["python_conditions.asp","python_for_loops.asp","python_while_loops.asp"],"Functions":["python_functions.asp"],"Comprehensions":["python_lists_comprehension.asp"],"Errors & debugging":["python_try_except.asp"],"Files & paths":["python_file_handling.asp"],"Modules & packages":["python_modules.asp","python_pip.asp"],"NumPy arrays":["numpy/numpy_creating_arrays.asp","numpy/numpy_array_indexing.asp"],"NumPy operations":["numpy/numpy_ufunc_intro.asp"],"Pandas foundations":["pandas/pandas_intro.asp","pandas/pandas_dataframes.asp","pandas/pandas_csv.asp"],"Selecting & filtering":["pandas/pandas_analyzing.asp"],"Missing & duplicate data":["pandas/pandas_cleaning_empty_cells.asp","pandas/pandas_cleaning_duplicates.asp"],"Types & transformations":["pandas/pandas_cleaning_wrong_format.asp"],"Dates & time series":["pandas/pandas_cleaning_wrong_format.asp"],"EDA":["pandas/pandas_analyzing.asp","pandas/pandas_correlations.asp"],"Matplotlib":["matplotlib_intro.asp","matplotlib_pyplot.asp"],"Seaborn":["matplotlib_intro.asp"]};
+const XLM={"Workbook basics":["get_started","introduction"],"Basic formulas":["formulas"],"Relative/absolute refs":["relative_reference","absolute_reference"],"Core functions":["sum","average","count","counta","countblank"],"Logical functions":["if","ifs","and","or","iferror"],"SUMIFS/COUNTIFS":["sumif","sumifs","countif","countifs","averageif"],"XLOOKUP/VLOOKUP":["vlookup","xlookup"],"INDEX-MATCH":["index_match"],"Text functions":["left","right","mid","len","trim","lower","substitute"],"Date functions":["today","datedif"],"Dynamic arrays":["filter","sort","unique"],"Sort & filter":["sort","filter"]};
+const lab=u=>u.split("/").pop().replace(/\.(asp|php)$/,"").replace(/^(python_|numpy_|pandas_|excel_)/,"").replace(/_/g," ");
+function auto(k,items){const learn=[],pr=[];let note="";
+ const add=(u,p)=>{if(!learn.some(x=>x[1]==u))learn.push([p+lab(u),u])};
+ if(k=="sql"){items.forEach(t=>(SQM[t]||[]).forEach(s=>add(B1+s,"SQLBolt: ")));
+  if(items.some(t=>!SQM[t]))learn.push(["PostgreSQL official tutorial (topic not on SQLBolt)","https://www.postgresql.org/docs/current/tutorial.html"]);
+  const i=SQL.indexOf(items[0]),lv=i<14?"Easy":i<22?"Easy to Medium":"Medium to Hard";
+  pr.push(["DataLemur: SQL interview questions (level: "+lv+")","https://datalemur.com/questions"]);
+  note=i<8?"Finish the SQLBolt basics before using DataLemur. Optional for now.":"On DataLemur, pick questions that use: "+items.join(", ")+".";}
+ if(k=="py"){items.forEach(t=>(PYM[t]||[]).forEach(s=>add(W3+"python/"+s,"W3Schools: ")));
+  if(items.some(t=>!PYM[t]))learn.push(["W3Schools Python tutorial (no exact page for some topics)",W3+"python/default.asp"]);
+  const i=PY.indexOf(items[0]);
+  pr.push(i<14?["LeetCode: Programming Skills (basic questions)","https://leetcode.com/studyplan/programming-skills/"]:["LeetCode: 30 Days of Pandas (data-analytics questions)","https://leetcode.com/studyplan/introduction-to-pandas/"]);
+  note="Start with Easy questions that match: "+items.join(", ")+".";}
+ if(k=="xl"){items.forEach(t=>(XLM[t]||[]).forEach(s=>add(W3+"excel/excel_"+s+".php","W3Schools: ")));
+  if(items.some(t=>!XLM[t]))learn.push(["W3Schools Excel tutorial (browse the chapter for this topic)",W3+"excel/index.php"]);
+  pr.push(["W3Schools Excel exercises",W3+"excel/excel_exercises.php"],["Excel Practice Online (practical tasks)","https://www.excel-practice-online.com/"],["InterviewBit: Excel interview questions","https://www.interviewbit.com/excel-interview-questions/"]);
+  note="Practise only what you learned today: "+items.join(", ")+".";}
+ if(k=="bi"){learn.push(["Microsoft Learn: PL-300 study guide (all learning paths)","https://learn.microsoft.com/certifications/resources/study-guides/pl-300"],["Microsoft Learn: Prepare and visualize data with Power BI","https://learn.microsoft.com/en-us/training/paths/prepare-visualize-data-power-bi/"],["Maven Analytics: Power BI Specialist path","https://mavenanalytics.io/path/power-bi-specialist"]);
+  pr.push(["Microsoft PL-300 hands-on labs (case-study style)","https://microsoftlearning.github.io/PL-300-Microsoft-Power-BI-Data-Analyst/"],["Maven Analytics: data playground and challenges","https://mavenanalytics.io/data-playground"]);
+  note="Practise in your own Power BI Desktop, then use the labs and Maven material to test your understanding.";}
+ return{learn,pr,note}}
+const TA=["A primary key uniquely identifies each row (unique, not null). A foreign key points to another table’s primary key and enforces the relationship.","Usually product_id, order_id and customer_id. Check uniqueness with COUNT(*) vs COUNT(DISTINCT id), then test the join for unmatched rows.","Naming columns reads less data, shows intent and does not break when columns are added.","WHERE filters rows before grouping; HAVING filters groups after aggregation.","LIKE is case-sensitive in PostgreSQL; ILIKE ignores case.","ORDER BY sales DESC LIMIT 5 (use RANK if ties matter).","NULL means unknown, not 0 or empty text. COUNT(col) skips NULLs; test with IS NULL.","COUNT(*) counts rows; COUNT(col) counts non-NULL values; COUNT(DISTINCT col) counts unique non-NULL values.","Every selected column must be grouped or aggregated, otherwise the database cannot decide which row’s value to show.","Use HAVING when the condition uses an aggregate, e.g. HAVING SUM(profit) < 0.","Compare TRIM(col) with col, or GROUP BY LOWER(TRIM(col)) and look for counts above 1.","ROUND controls precision for money values. Rounding rows before summing can distort totals, so round the final result.","EXTRACT returns a part (month, year) as a number; DATE_TRUNC rounds to the start of a period, ideal for time-series grouping.","CASE WHEN margin < 0 THEN 'Loss' WHEN margin < 0.1 THEN 'Low' ELSE 'Healthy' END.","INNER JOIN keeps only matching rows; LEFT JOIN keeps all left rows, so unmatched ones are not lost.","LEFT JOIN products to sales, then WHERE sales.product_id IS NULL.","When rows relate to other rows in the same table, e.g. employee and manager.","UNION removes duplicates (extra work); UNION ALL keeps everything and is faster.","A scalar subquery returns one value (e.g. overall AVG); a multi-row one returns a set used with IN or ANY.","A correlated subquery runs per outer row and references it. It is often replaceable by a JOIN or window function and can be slower.","CTEs make long queries readable, reusable inside the query and easy to debug step by step.","GROUP BY collapses rows; a window function keeps every row and adds a calculation over a partition.","ROW_NUMBER is always unique; RANK leaves gaps after ties; DENSE_RANK leaves none.","DELETE removes selected rows; TRUNCATE empties the table quickly; DROP removes the table itself.","A transaction makes statements succeed together (COMMIT) or not at all (ROLLBACK).","Atomicity (all or nothing), Consistency (valid state), Isolation (concurrent safety), Durability (survives crashes).","It shows the real plan, row counts and timings so you can spot sequential scans and missing indexes.","Normalisation removes redundancy for transactional systems; analytics often uses denormalised star schemas for simpler, faster reads.","State the business question, tables and joins, filters, metric logic, and how you validated the result.","Check join keys for one-to-many fan-out, compare COUNT with COUNT DISTINCT on keys, then deduplicate or aggregate before joining."];
+const OA=["Recompute the total independently (SQL or Excel) and compare the measure value and row counts.","One central fact table of measurable events linked to surrounding dimension tables.","A calculated column is stored per row at refresh; a measure is calculated at query time in the current filter context.","It evaluates an expression after changing the filter context.","Time intelligence needs a continuous date table marked as the date table.","The mean is pulled by outliers; the median is robust. On skewed data such as income the mean misleads.","The probability of seeing data at least this extreme if the null hypothesis were true. It is not the probability the hypothesis is true.","Correlation shows association; causation needs controlled experiments or sound causal reasoning.","Problem, data, cleaning, analysis, insights, recommendation, impact. Keep a 2-minute version ready."];
+const HA=["Present, past, future in about 60 seconds: who you are, your MCA and project work, and why analytics roles.","Link curiosity about data-driven decisions to a concrete project you built; end with what you want to do next.","Use STAR: situation, task, action, result. Quantify the result.","Pick a real strength with proof; pair the weakness with the concrete step you are taking to fix it.","STAR: describe the bug, how you isolated it, the fix and what you now do to prevent it.","Explain urgency vs impact, how you plan your week and how you communicate trade-offs.","Give one example of a fast learning curve and how you structured it (plan, practice, project).","Show you listen, ask clarifying questions and apply feedback. Give a real example.","Combine skills, a validated project, learning speed and reliability. Keep it evidence-based.","Realistic growth: strong analyst, owning dashboards and insights, then wider business impact.","Own the mistake, state the impact, the fix and the process change.","Start with the answer, use plain words, one chart, one recommendation, then offer detail.","Describe your system: a schedule, small daily wins, accountability and tracking like this calendar.","Describe your role, how the team worked, and one thing you did that helped the team succeed.","Connect your background in building products to understanding users and data, and why analytics is the next step."];
+const recUrl={};let mr=null,chunks=[];
+function open(n){const d=days[n-1],s=st(n);
+ const lk=a=>a.length?a.map(x=>`<a class="lk" href="${x[1]}" target="_blank" rel="noopener">${x[0]} ↗</a>`).join(""):'<span class="lk">link to be added</span>';
+ const slots=d.slots.map(x=>{const c=s.chk[x.k],L=LINKS[n+"-"+x.k]||{};
+  if(SIMPLE[x.k])return `<label class="row"><input type="checkbox" data-c="${x.k}" ${c?"checked":""}><div><b>${x.t}</b> <span class="mu">· ${x.time}</span>${x.k=="ma"?`<div class="sub2">${x.items[0]}</div>`:`<div class="sub2">${SIMPLE[x.k]}</div>`}</div></label>`;
+  const A=auto(x.k,x.items),ex=v=>[].concat(v||[]).map(u=>["Your link",u]);
+  return `<details><summary><input type="checkbox" data-c="${x.k}" ${c?"checked":""} onclick="event.stopPropagation()"><span class="t">${x.t}</span><span class="time">${x.time}</span></summary><div class="in"><div class="mu" style="margin-top:8px">What you are learning today</div>${x.items.map(i=>`<div class="expl"><b>${i}</b>${DESC[i]||""}</div>`).join("")}<div class="mu" style="margin-top:10px">Lecture</div><div class="about">This lecture covers: ${L.about||"<i>to be added</i>"}</div>${lk(A.learn.concat(ex(L.learn)))}<div class="mu" style="margin-top:10px">Practice</div>${A.note?`<div class="note">${A.note}</div>`:""}${lk(A.pr.concat(ex(L.practice)))}</div></details>`}).join("");
+ const ta=TQ.sql.includes(d.tq)?TA[TQ.sql.indexOf(d.tq)]:OA[TQ.oth.indexOf(d.tq)];
+ $("dlg").innerHTML=`<div class="dh"><div><h2>Day ${n} · ${ds(d)}</h2><div class="mu">${d.gist}</div></div><button class="x" onclick="dlg.close()" aria-label="Close">×</button></div><div class="db"><h3>Today’s slots</h3>${slots}<h3>Interview prep</h3><div class="q"><b>HR / soft skill:</b> ${d.hr}<div><button class="rb" id="rec">${recUrl[n]?"⏺ Record again":"⏺ Record answer"}</button><span class="mu" id="recmsg"></span><audio id="aud" controls src="${recUrl[n]||""}" style="display:${recUrl[n]?"block":"none"};width:100%"></audio></div><details class="ans"><summary>Show answer approach</summary><div class="about">${HA[HR.indexOf(d.hr)]}</div></details></div><div class="q"><b>Technical:</b> ${d.tq}<textarea class="ans" id="ans" placeholder="Write your answer here, or work it out on paper first">${s.ans||""}</textarea><details class="ans"><summary>Show answer</summary><div class="about">${ta}</div></details></div><h3>How was the day?</h3><div class="opts">${MOODS.map((m,i)=>`<button data-m="${i}" class="${s.mood===i?"on":""}">${m[0]} ${m[1]}</button>`).join("")}</div><h3>Difficulty</h3><div class="stars">${[1,2,3,4,5].map(i=>`<button data-s="${i}" class="${s.diff>=i?"on":""}">★</button>`).join("")}</div><button class="fin ${s.done?"d":""}" id="fin">${s.done?"✓ Completed (tap to undo)":"Mark day complete"}</button></div>`;
+ $("dlg").dataset.n=n;$("dlg").showModal()}
+document.addEventListener("click",async e=>{
+ if(e.target.id=="tg"){const t=document.documentElement.dataset.theme=="dark"?"light":"dark";document.documentElement.dataset.theme=t;try{localStorage.setItem("sprint-theme",t)}catch(x){}return}
+ if(e.target.id=="rec"){const n=+$("dlg").dataset.n;if(mr&&mr.state=="recording"){mr.stop();return}
+  try{const m=await navigator.mediaDevices.getUserMedia({audio:true});chunks=[];mr=new MediaRecorder(m);mr.ondataavailable=v=>chunks.push(v.data);
+   mr.onstop=()=>{m.getTracks().forEach(t=>t.stop());recUrl[n]=URL.createObjectURL(new Blob(chunks,{type:mr.mimeType}));$("rec").textContent="⏺ Record again";$("aud").src=recUrl[n];$("aud").style.display="block"};
+   mr.start();$("rec").textContent="⏹ Stop recording"}catch(err){$("recmsg").textContent="Microphone unavailable (permission blocked in this view)."}}
+});
+document.addEventListener("input",e=>{if(e.target.id=="ans"){st(+$("dlg").dataset.n).ans=e.target.value;save()}});
+document.addEventListener("click",e=>{const dlg=$("dlg"),n=+dlg.dataset.n;
+ const b=e.target.closest(".day");if(b)return open(+b.dataset.n);
+ if(e.target===dlg)return dlg.close();
+ if(!dlg.open)return;const s=st(n),m=e.target.closest("[data-m]"),r=e.target.closest("[data-s]");
+ if(e.target.dataset.c){s.chk[e.target.dataset.c]=e.target.checked;save()}
+ if(m){s.mood=+m.dataset.m;save();open(n)}
+ if(r){s.diff=+r.dataset.s;save();open(n)}
+ if(e.target.id=="fin"){s.done=!s.done;save();dlg.close();render()}});
+dlg.addEventListener("close",render);
+$("t11").onclick=()=>{tab=0;render()};$("t12").onclick=()=>{tab=1;render()};
+{const t=new Date();if(t.getMonth()==11)tab=1}
+render();
+</script></body></html>
